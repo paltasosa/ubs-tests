@@ -23,4 +23,11 @@ Feature: Landing page is working correctly
 		Given the user access ubs.com page
 		When user selects US client account login
 		Then user is redirected to login page
-		And login is working for specified user and password
+		When user tries to login
+		Then login is working for specified user and password
+
+	Scenario: Verify USA registration is working as expected
+		Given the user access ubs.com page
+		When user selects US client account login
+		Then user is redirected to login page
+		And user can select register now to start a new registration process correctly

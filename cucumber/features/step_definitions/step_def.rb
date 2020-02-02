@@ -84,33 +84,21 @@ Then("ubs logins options are displayed correctly for country") do
   when "france"
     (@browser.button visible_text: /UBS logins/).click
     (@browser.a visible_text: /UBS e-Banking France/).wait_until_present
-    ebanking_link = @browser.a visible_text: /UBS e-Banking France/
-    ebanking_link.should be_present
-    ubs_quotes_link = @browser.a visible_text: /UBS Quotes/
-    ubs_quotes_link.should be_present
-    ubs_connect_link = @browser.a visible_text: /UBS Connect France/
-    ubs_connect_link.should be_present
-    investment_bank_client_portal_link = @browser.a visible_text: /Investment Bank Client Portal/
-    investment_bank_client_portal_link.should be_present
-    ubs_neo_link = @browser.a visible_text: /UBS Neo/
-    ubs_neo_link.should be_present
+    (@browser.a visible_text: /UBS e-Banking France/).should be_present
+    (@browser.a visible_text: /UBS Quotes/).should be_present
+    (@browser.a visible_text: /UBS Connect France/).should be_present
+    (@browser.a visible_text: /Investment Bank Client Portal/).should be_present
+    (ubs_neo_link = @browser.a visible_text: /UBS Neo/).should be_present
   when "usa"
     (@browser.button visible_text: /UBS logins/).click
     (@browser.a visible_text: /Online Services/).wait_until_present
-    online_services_link = @browser.a visible_text: /Online Services/
-    online_services_link.should be_present
-    ubs_private_bank_account_login_link = @browser.a visible_text: /UBS Private Bank Account Login/
-    ubs_private_bank_account_login_link.should be_present
-    ubs_one_source_link = @browser.a visible_text: /UBS One Source/
-    ubs_one_source_link.should be_present
-    benefits_of_enrolling_link = @browser.a visible_text: /Benefits of Enrolling/
-    benefits_of_enrolling_link.should be_present
-    enroll_now_link = @browser.a visible_text: /Enroll Now/
-    enroll_now_link.should be_present
-    investment_bank_client_portal_link = @browser.a visible_text: /Investment Bank Client Portal/
-    investment_bank_client_portal_link.should be_present
-    ubs_neo_link = @browser.a visible_text: /UBS Neo/
-    ubs_neo_link.should be_present
+    (@browser.a visible_text: /Online Services/).should be_present
+    (@browser.a visible_text: /UBS Private Bank Account Login/).should be_present
+    (@browser.a visible_text: /UBS One Source/).should be_present
+    (@browser.a visible_text: /Benefits of Enrolling/).should be_present
+    (@browser.a visible_text: /Enroll Now/).should be_present
+    (@browser.a visible_text: /Investment Bank Client Portal/).should be_present
+    (@browser.a visible_text: /UBS Neo/).should be_present
   else
     puts "No country specified or specified country not supported yet"
   end
@@ -125,7 +113,18 @@ end
 
 Then("user is redirected to login page") do
   (@browser.h1 visible_text: /Welcome to UBS Online Services/).wait_until_present
+end
+
+Then("login is working for specified user and password") do
   if (ENV['USERNAME']!=nil && ENV['PASSWORD']!=nil) 
+    puts "We would see login successfully here, but I don't have valid credentials to create this test yet"
+  else
+    puts "Username and password must be specified to run this test"
+  end
+end
+
+When("user tries to login") do
+    if (ENV['USERNAME']!=nil && ENV['PASSWORD']!=nil) 
     (@browser.text_field id:/username/).set ENV['USERNAME']
     (@browser.text_field id:/password/).set ENV['PASSWORD']
     (@browser.input id:/submit/).click
@@ -137,10 +136,15 @@ Then("user is redirected to login page") do
   end
 end
 
-Then("login is working for specified user and password") do
-  if (ENV['USERNAME']!=nil && ENV['PASSWORD']!=nil) 
-    puts "We would see login successfully here, but I don't have valid credentials to create this test yet"
-  else
-    puts "Username and password must be specified to run this test"
-  end
+Then("user can select register now to start a new registration process correctly") do
+  (@browser.button id:/registernow/).click
+  (@browser.h2 visible_text: /Enter Personal Information/).wait_until_present
+  (@browser.input id: /ssn/).should be_present
+  (@browser.input id: /lastname/).should be_present
+  (@browser.input class: /account-branch/).should be_present
+  (@browser.input class: /account-number/).should be_present
+  (@browser.input class: /month/).should be_present
+  (@browser.input class: /day/).should be_present
+  (@browser.input class: /year/).should be_present
+  (@browser.input type: /submit/).should be_present
 end
